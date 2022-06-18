@@ -1,17 +1,17 @@
 {
-  "name": ":vendor_slug/:package_slug",
-  "description": ":package_description",
+  "name": "spiral-packages/rate-limiter",
+  "description": "A simple to use rate limiting abstraction which, in conjunction with your application's cache, provides an easy way to limit any action during a specified window of time.",
   "keywords": [
-    ":vendor_name",
+    "spiral-packages",
     "spiral",
-    ":package_slug"
+    "rate-limiter"
   ],
-  "homepage": "https://github.com/:vendor_slug/:package_slug",
+  "homepage": "https://github.com/spiral-packages/rate-limiter",
   "license": "MIT",
   "authors": [
     {
-      "name": ":author_name",
-      "email": "author@domain.com",
+      "name": "butschster",
+      "email": "butschster@gmail.com",
       "role": "Developer"
     }
   ],
@@ -28,13 +28,13 @@
   },
   "autoload": {
     "psr-4": {
-      "VendorName\\Skeleton\\": "src"
+      "Spiral\\RateLimiter\\": "src"
     }
   },
   "autoload-dev": {
     "psr-4": {
-      "VendorName\\Skeleton\\Tests\\App\\": "tests/app",
-      "VendorName\\Skeleton\\Tests\\": "tests/src"
+      "Spiral\\RateLimiter\\Tests\\App\\": "tests/app",
+      "Spiral\\RateLimiter\\Tests\\": "tests/src"
     }
   },
   "scripts": {
@@ -47,7 +47,7 @@
   "extra": {
     "spiral": {
       "bootloaders": [
-        "VendorName\\Skeleton\\Bootloader\\SkeletonBootloader"
+        "Spiral\\RateLimiter\\Bootloader\\RateLimiterBootloader"
       ]
     }
   },

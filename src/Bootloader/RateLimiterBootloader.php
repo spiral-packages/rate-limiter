@@ -2,16 +2,16 @@
 
 declare(strict_types=1);
 
-namespace VendorName\Skeleton\Bootloader;
+namespace Spiral\RateLimiter\Bootloader;
 
 use Spiral\Boot\Bootloader\Bootloader;
 use Spiral\Core\Container;
 use Spiral\Config\ConfiguratorInterface;
-use VendorName\Skeleton\Commands;
-use VendorName\Skeleton\Config\SkeletonConfig;
+use Spiral\RateLimiter\Commands;
+use Spiral\RateLimiter\Config\RateLimiterConfig;
 use Spiral\Console\Bootloader\ConsoleBootloader;
 
-class SkeletonBootloader extends Bootloader
+class RateLimiterBootloader extends Bootloader
 {
     protected const BINDINGS = [];
     protected const SINGLETONS = [];
@@ -28,7 +28,7 @@ class SkeletonBootloader extends Bootloader
     {
         $this->initConfig();
 
-        $console->addCommand(Commands\SkeletonCommand::class);
+        $console->addCommand(Commands\RateLimiterCommand::class);
     }
 
     public function boot(Container $container): void
@@ -38,7 +38,7 @@ class SkeletonBootloader extends Bootloader
     private function initConfig(): void
     {
         $this->config->setDefaults(
-            SkeletonConfig::CONFIG,
+            RateLimiterConfig::CONFIG,
             []
         );
     }

@@ -1,17 +1,10 @@
-# :package_description
+# A simple to use rate limiting abstraction which, in conjunction with your application's cache, provides an easy way to limit any action during a specified window of time.
 
-[![PHP](https://img.shields.io/packagist/php-v/:vendor_slug/:package_slug.svg?style=flat-square)](https://packagist.org/packages/:vendor_slug/:package_slug)
-[![Latest Version on Packagist](https://img.shields.io/packagist/v/:vendor_slug/:package_slug.svg?style=flat-square)](https://packagist.org/packages/:vendor_slug/:package_slug)
-[![GitHub Tests Action Status](https://img.shields.io/github/workflow/status/:vendor_slug/:package_slug/run-tests?label=tests&style=flat-square)](https://github.com/:vendor_slug/:package_slug/actions?query=workflow%3Arun-tests+branch%3Amain)
-[![Total Downloads](https://img.shields.io/packagist/dt/:vendor_slug/:package_slug.svg?style=flat-square)](https://packagist.org/packages/:vendor_slug/:package_slug)
-<!--delete-->
----
-This repo can be used to scaffold a Spiral Framework package. Follow these steps to get started:
+[![PHP](https://img.shields.io/packagist/php-v/spiral-packages/rate-limiter.svg?style=flat-square)](https://packagist.org/packages/spiral-packages/rate-limiter)
+[![Latest Version on Packagist](https://img.shields.io/packagist/v/spiral-packages/rate-limiter.svg?style=flat-square)](https://packagist.org/packages/spiral-packages/rate-limiter)
+[![GitHub Tests Action Status](https://img.shields.io/github/workflow/status/spiral-packages/rate-limiter/run-tests?label=tests&style=flat-square)](https://github.com/spiral-packages/rate-limiter/actions?query=workflow%3Arun-tests+branch%3Amain)
+[![Total Downloads](https://img.shields.io/packagist/dt/spiral-packages/rate-limiter.svg?style=flat-square)](https://packagist.org/packages/spiral-packages/rate-limiter)
 
-1. Press the "Use template" button at the top of this repo to create a new repo with the contents of this skeleton.
-2. Run `php ./configure.php` to run a script that will replace all placeholders throughout all the files.
----
-<!--/delete-->
 This is where your description should go. Limit it to a paragraph or two. Consider adding a small example.
 
 
@@ -29,7 +22,7 @@ Make sure that your server is configured with following PHP version and extensio
 You can install the package via composer:
 
 ```bash
-composer require :vendor_slug/:package_slug
+composer require spiral-packages/rate-limiter
 ```
 
 After package install you need to register bootloader from the package.
@@ -37,7 +30,7 @@ After package install you need to register bootloader from the package.
 ```php
 protected const LOAD = [
     // ...
-    \VendorName\Skeleton\Bootloader\SkeletonBootloader::class,
+    \Spiral\RateLimiter\Bootloader\RateLimiterBootloader::class,
 ];
 ```
 
@@ -64,7 +57,7 @@ Please review [our security policy](../../security/policy) on how to report secu
 
 ## Credits
 
-- [:author_name](https://github.com/:author_username)
+- [butschster](https://github.com/butschster)
 - [All Contributors](../../contributors)
 
 ## License
