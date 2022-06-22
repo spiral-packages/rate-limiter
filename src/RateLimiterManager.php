@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Spiral\RateLimiter;
 
+use Psr\SimpleCache\CacheInterface;
 use Spiral\Core\Container\Autowire;
 use Spiral\Core\FactoryInterface;
 use Spiral\RateLimiter\Config\RateLimiterConfig;
@@ -12,7 +13,8 @@ final class RateLimiterManager
 {
     public function __construct(
         private readonly FactoryInterface $factory,
-        private readonly RateLimiterConfig $config
+        private readonly RateLimiterConfig $config,
+        private readonly CacheInterface $cache
     ) {
     }
 
@@ -22,8 +24,8 @@ final class RateLimiterManager
     public function getRateLimiter(
         string $name,
         array $payload = [],
-        int $maxAttempts = null,
-        int $decaySeconds = null
+        ?int $maxAttempts = null,
+        ?int $decaySeconds = null
     ): RateLimiter {
         $decaySeconds ??= $this->config->getDefaultDecaySeconds();
 
@@ -37,6 +39,7 @@ final class RateLimiterManager
 
         $parameters = [
             'key' => $key,
+            'cache' => $this->cache,
         ];
 
         if ($maxAttempts !== null) {

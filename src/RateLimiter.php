@@ -6,7 +6,7 @@ use Psr\SimpleCache\CacheInterface;
 use Spiral\Core\InvokerInterface;
 use Spiral\RateLimiter\Exceptions\AttemptsExceededException;
 
-class RateLimiter
+final class RateLimiter
 {
     /**
      * @var non-empty-string
@@ -104,7 +104,7 @@ class RateLimiter
      * Get the number of retries left for the given key.
      * @throws \Psr\SimpleCache\InvalidArgumentException
      */
-    final public function remainsAttempts(): int
+    final public function remainingAttempts(): int
     {
         return $this->maxAttempts - $this->totalAttempts();
     }
