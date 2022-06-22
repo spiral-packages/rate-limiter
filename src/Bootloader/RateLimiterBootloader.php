@@ -12,12 +12,17 @@ use Spiral\Config\ConfiguratorInterface;
 use Spiral\Core\FactoryInterface;
 use Spiral\RateLimiter\Config\RateLimiterConfig;
 use Spiral\Console\Bootloader\ConsoleBootloader;
+use Spiral\RateLimiter\Fingerprint\AuthenticatedFingerprint;
+use Spiral\RateLimiter\Fingerprint\CompositeFingerprint;
+use Spiral\RateLimiter\Fingerprint\RequestFingerprint;
 use Spiral\RateLimiter\RateLimiterManager;
+use Spiral\RateLimiter\RequestFingerprintInterface;
 
 final class RateLimiterBootloader extends Bootloader
 {
     protected const SINGLETONS = [
         RateLimiterManager::class => [self::class, 'initManager'],
+        RequestFingerprintInterface::class => [self::class, 'initFingerprint'],
     ];
 
     public function __construct(
@@ -48,6 +53,13 @@ final class RateLimiterBootloader extends Bootloader
             $config,
             $provider->storage($config->getCacheStorage())
         );
+    }
+
+    private function initFingerprint(
+        AuthenticatedFingerprint $authFingerprint,
+        RequestFingerprint $requestFingerprint
+    ): RequestFingerprintInterface {
+        return new CompositeFingerprint($authFingerprint, $requestFingerprint);
     }
 
     private function initConfig(): void
