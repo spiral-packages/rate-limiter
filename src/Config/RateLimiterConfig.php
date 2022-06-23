@@ -18,6 +18,14 @@ final class RateLimiterConfig extends InjectableConfig
     ];
 
     /**
+     * @return array<non-empty-string, string|Autowire>
+     */
+    public function getLimiterAliases(): array
+    {
+        return $this->config['aliases'] ?? [];
+    }
+
+    /**
      * @return class-string<RateLimiter>|Autowire
      */
     public function getLimiterByAlias(string $alias): string|Autowire

@@ -30,9 +30,19 @@ final class RateLimiterBootloader extends Bootloader
     ) {
     }
 
-    public function init(Container $container, ConsoleBootloader $console): void
+    public function init(): void
     {
         $this->initConfig();
+    }
+
+    public function boot(Container $container, RateLimiterConfig $config)
+    {
+        foreach ($config->getLimiterAliases() as $alias => $limiter) {
+            $container->bindSingleton(
+                'rate-limiter:'.$alias,
+                static fn(FactoryInterface $factory) => $factory->make($limiter)
+            );
+        }
     }
 
     final public function registerRateLimiter(string $alias, string|Container\Autowire $class): void
