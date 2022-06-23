@@ -4,11 +4,11 @@ declare(strict_types=1);
 
 namespace Spiral\RateLimiter\Middleware;
 
-use Psr\Http\Message\ResponseFactoryInterface;
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
 use Psr\Http\Server\MiddlewareInterface;
 use Psr\Http\Server\RequestHandlerInterface;
+use Spiral\RateLimiter\Exceptions\AttemptsExceededException;
 use Spiral\RateLimiter\RateLimiterManager;
 use Spiral\RateLimiter\RequestFingerprintInterface;
 
@@ -16,7 +16,6 @@ final class ThrottleRequestsMiddleware implements MiddlewareInterface
 {
     public function __construct(
         private readonly RateLimiterManager $manager,
-        private readonly ResponseFactoryInterface $responseFactory,
         private readonly RequestFingerprintInterface $fingerprint,
         private readonly ?string $name,
         private readonly array $payload = [],
@@ -25,6 +24,10 @@ final class ThrottleRequestsMiddleware implements MiddlewareInterface
     ) {
     }
 
+    /**
+     * @throws AttemptsExceededException
+     * @throws \Psr\SimpleCache\InvalidArgumentException
+     */
     public function process(ServerRequestInterface $request, RequestHandlerInterface $handler): ResponseInterface
     {
         $signature = $this->fingerprint->getFingerprint($request);
@@ -41,10 +44,11 @@ final class ThrottleRequestsMiddleware implements MiddlewareInterface
         );
 
         if ($limiter->isAttemptsExceeded()) {
-            return $this->responseFactory->createResponse(429, 'Too Many Attempts.')
-                ->withHeader('X-RateLimit-Limit', $limiter->maxAttempts())
-                ->withHeader('X-RateLimit-Reset', $limiter->availableAt()->getTimestamp())
-                ->withHeader('Retry-After', $limiter->availableIn()->s);
+            throw new AttemptsExceededException(
+                $limiter->maxAttempts(),
+                $limiter->availableAt(),
+                $limiter->availableIn()
+            );
         }
 
         $limiter->hit();
