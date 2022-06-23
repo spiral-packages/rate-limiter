@@ -2,6 +2,7 @@
 
 namespace Spiral\RateLimiter;
 
+use DateTimeImmutable;
 use Psr\SimpleCache\CacheInterface;
 use Spiral\Core\InvokerInterface;
 use Spiral\RateLimiter\Exceptions\AttemptsExceededException;
@@ -100,6 +101,11 @@ final class RateLimiter
         return (int)$this->cache->get($this->key, 0);
     }
 
+    final public function maxAttempts(): int
+    {
+        return $this->maxAttempts;
+    }
+
     /**
      * Get the number of retries left for the given key.
      * @throws \Psr\SimpleCache\InvalidArgumentException
@@ -133,11 +139,21 @@ final class RateLimiter
      */
     final public function availableIn(): \DateInterval
     {
-        $currentTime = (new \DateTimeImmutable())->getTimestamp();
+        $currentTime = (new DateTimeImmutable())->getTimestamp();
         $lastUsedTime = (int)$this->cache->get($this->getTimerCacheKey());
 
         return \DateInterval::createFromDateString(
             \sprintf('+ %d seconds', \max(0, $lastUsedTime - $currentTime))
+        );
+    }
+
+    /**
+     * Get the date when limiter is accessible again.
+     */
+    final public function availableAt(): DateTimeImmutable
+    {
+        return DateTimeImmutable::createFromMutable(
+            (new \DateTime())->add($this->availableIn())
         );
     }
 

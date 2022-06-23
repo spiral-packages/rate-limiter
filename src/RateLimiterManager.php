@@ -27,7 +27,6 @@ final class RateLimiterManager
         ?int $maxAttempts = null,
         ?int $decaySeconds = null
     ): RateLimiter {
-        $decaySeconds ??= $this->config->getDefaultDecaySeconds();
 
         $key = $name;
 
@@ -53,6 +52,9 @@ final class RateLimiterManager
         if ($class instanceof Autowire) {
             return $class->resolve($this->factory, $parameters);
         }
+
+        $parameters['decaySeconds'] ??= $this->config->getDefaultDecaySeconds();
+        $parameters['maxAttempts'] ??= $this->config->getDefaultMaxAttempts();
 
         return $this->factory->make($class, $parameters);
     }

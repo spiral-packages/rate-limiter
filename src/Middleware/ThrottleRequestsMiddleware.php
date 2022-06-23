@@ -34,7 +34,7 @@ final class ThrottleRequestsMiddleware implements MiddlewareInterface
         }
 
         $limiter = $this->manager->getRateLimiter(
-            name: $this->name,
+            name: $this->name ?: 'default',
             payload: \array_merge($this->payload, ['sig' => $signature]),
             maxAttempts: $this->maxAttempts,
             decaySeconds: $this->decaySeconds
@@ -42,15 +42,16 @@ final class ThrottleRequestsMiddleware implements MiddlewareInterface
 
         if ($limiter->isAttemptsExceeded()) {
             return $this->responseFactory->createResponse(429, 'Too Many Attempts.')
-                ->withHeader('X-RateLimit-Limit', $limiter->totalAttempts())
-                ->withHeader('X-RateLimit-Reset', (new \DateTime())->add($limiter->availableIn())->getTimestamp())
+                ->withHeader('X-RateLimit-Limit', $limiter->maxAttempts())
+                ->withHeader('X-RateLimit-Reset', $limiter->availableAt()->getTimestamp())
                 ->withHeader('Retry-After', $limiter->availableIn()->s);
         }
 
         $limiter->hit();
 
         return $handler->handle($request)
-            ->withHeader('X-RateLimit-Limit', $limiter->totalAttempts())
+            ->withHeader('X-RateLimit-Limit', $limiter->maxAttempts())
+            ->withHeader('X-RateLimit-Reset', $limiter->availableAt()->getTimestamp())
             ->withHeader('X-RateLimit-Remaining', $limiter->remainingAttempts());
     }
 }

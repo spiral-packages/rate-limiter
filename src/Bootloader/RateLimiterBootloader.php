@@ -67,7 +67,10 @@ final class RateLimiterBootloader extends Bootloader
         $this->config->setDefaults(
             RateLimiterConfig::CONFIG,
             [
-                'decaySeconds' => 60,
+                'default' => [
+                    'decay_seconds' => 60,
+                    'max_attempts' => 100,
+                ],
                 'aliases' => [],
             ]
         );

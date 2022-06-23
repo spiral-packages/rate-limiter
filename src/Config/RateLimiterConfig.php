@@ -14,7 +14,7 @@ final class RateLimiterConfig extends InjectableConfig
     protected array $config = [
         'decaySeconds' => 60,
         'aliases' => [],
-        'cache_storage' => null
+        'cache_storage' => null,
     ];
 
     /**
@@ -31,11 +31,16 @@ final class RateLimiterConfig extends InjectableConfig
 
     public function getDefaultDecaySeconds(): int
     {
-        return $this->config['decaySeconds'] ?? 60;
+        return $this->config['default']['decay_seconds'] ?? 60;
     }
 
     public function getCacheStorage(): ?string
     {
-        return $this->config['cache_storage'] ?: null;
+        return $this->config['cache']['storage'] ?? null;
+    }
+
+    public function getDefaultMaxAttempts()
+    {
+        return $this->config['default']['max_attempts'] ?? 1000;
     }
 }
