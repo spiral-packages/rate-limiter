@@ -1,4 +1,4 @@
-# A simple to use rate limiting abstraction which, in conjunction with your application's cache, provides an easy way to limit any action during a specified window of time.
+# A rate limiter for Spiral Framework.
 
 [![PHP](https://img.shields.io/packagist/php-v/spiral-packages/rate-limiter.svg?style=flat-square)](https://packagist.org/packages/spiral-packages/rate-limiter)
 [![Latest Version on Packagist](https://img.shields.io/packagist/v/spiral-packages/rate-limiter.svg?style=flat-square)](https://packagist.org/packages/spiral-packages/rate-limiter)
