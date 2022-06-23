@@ -4,7 +4,9 @@ declare(strict_types=1);
 
 namespace Spiral\RateLimiter\Exceptions;
 
-class AttemptsExceededException extends RateLimiterException
+use Spiral\Http\Exception\ClientException;
+
+class AttemptsExceededException extends ClientException
 {
     public function __construct(
         public readonly int $maxAttempts,
@@ -12,6 +14,6 @@ class AttemptsExceededException extends RateLimiterException
         public readonly \DateInterval $retryAfter,
         string $message = 'Too Many Attempts.',
     ) {
-        parent::__construct($message, 429);
+        parent::__construct(429, $message);
     }
 }
