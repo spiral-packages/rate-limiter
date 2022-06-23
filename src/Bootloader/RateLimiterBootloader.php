@@ -15,6 +15,7 @@ use Spiral\Console\Bootloader\ConsoleBootloader;
 use Spiral\RateLimiter\Fingerprint\AuthenticatedFingerprint;
 use Spiral\RateLimiter\Fingerprint\CompositeFingerprint;
 use Spiral\RateLimiter\Fingerprint\RequestFingerprint;
+use Spiral\RateLimiter\Middleware\ThrottleRequestsMiddleware;
 use Spiral\RateLimiter\RateLimiterManager;
 use Spiral\RateLimiter\RequestFingerprintInterface;
 
@@ -37,10 +38,20 @@ final class RateLimiterBootloader extends Bootloader
 
     public function boot(Container $container, RateLimiterConfig $config)
     {
+        $container->bindSingleton(
+            'rate-limiter',
+            static fn(FactoryInterface $factory) => $factory->make(
+                ThrottleRequestsMiddleware::class
+            )
+        );
+
         foreach ($config->getLimiterAliases() as $alias => $limiter) {
             $container->bindSingleton(
                 'rate-limiter:'.$alias,
-                static fn(FactoryInterface $factory) => $factory->make($limiter)
+                static fn(FactoryInterface $factory) => $factory->make(
+                    ThrottleRequestsMiddleware::class,
+                    ['name' => $alias]
+                )
             );
         }
     }
